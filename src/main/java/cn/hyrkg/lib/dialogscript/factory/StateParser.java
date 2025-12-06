@@ -29,6 +29,8 @@ public class StateParser {
     public DialogScript script = null;
     public DialogSection workingSection = null;
 
+    public boolean loadSyntax = false; //是否加载语法
+
     // 逻辑块上下文
     private static class BlockContext {
         ConditionSyntax currentActiveCondition;
@@ -81,28 +83,30 @@ public class StateParser {
             switchNewScrip(newScriptName);
         } else if (RegexPatternUtil.PATTERN_BRACE.matcher(string).matches()) {
             switchNewSection(string.substring(1, string.length() - 1));
-        } else if (string.startsWith("if ")) {
-            handleIf(string.substring(3).trim());
-        } else if (string.startsWith("elif ")) {
-            handleElif(string.substring(5).trim());
-        } else if (string.startsWith("else")) {
-            handleElse();
-        } else if (string.startsWith("endif")) {
-            handleEndif();
-        } else {
-            List<String> availableTagList = creator.getRegisteredSyntax()
-                    .keySet()
-                    .stream()
-                    .filter(tag -> string.startsWith(tag))
-                    .collect(Collectors.toList());
+        } else if (loadSyntax) {
+            if (string.startsWith("if ")) {
+                handleIf(string.substring(3).trim());
+            } else if (string.startsWith("elif ")) {
+                handleElif(string.substring(5).trim());
+            } else if (string.startsWith("else")) {
+                handleElse();
+            } else if (string.startsWith("endif")) {
+                handleEndif();
+            } else {
+                List<String> availableTagList = creator.getRegisteredSyntax()
+                        .keySet()
+                        .stream()
+                        .filter(tag -> string.startsWith(tag))
+                        .collect(Collectors.toList());
 
-            //TODO 当前只支持1个syntax，过多过少都报错
-            Preconditions.checkState(availableTagList.size() > 0, "tag undefined! " + string);
-            Preconditions.checkState(availableTagList.size() == 1, "tag conflict! " + string);
-            String usingTag = availableTagList.get(0);
-            ScriptSyntax syntax = creator.createSyntax(usingTag);
-            syntax.parser(substring(string, usingTag.length()));
-            completeSyntax(syntax);
+                //TODO 当前只支持1个syntax，过多过少都报错
+                Preconditions.checkState(availableTagList.size() > 0, "tag undefined! " + string);
+                Preconditions.checkState(availableTagList.size() == 1, "tag conflict! " + string);
+                String usingTag = availableTagList.get(0);
+                ScriptSyntax syntax = creator.createSyntax(usingTag);
+                syntax.parser(substring(string, usingTag.length()));
+                completeSyntax(syntax);
+            }
         }
 
     }

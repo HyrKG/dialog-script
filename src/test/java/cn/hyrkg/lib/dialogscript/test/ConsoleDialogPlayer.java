@@ -15,8 +15,7 @@ public class ConsoleDialogPlayer extends BaseScriptPlayer {
 
     private HashMap<Integer, OptionSyntax> currentOptions = new HashMap<>();
 
-    public ConsoleDialogPlayer(DialogScriptManager manager) {
-        super(manager);
+    public ConsoleDialogPlayer() {
         useAnnotationFramework();
     }
 

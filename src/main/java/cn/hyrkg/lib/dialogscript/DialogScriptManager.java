@@ -1,9 +1,9 @@
 package cn.hyrkg.lib.dialogscript;
 
-import cn.hyrkg.lib.dialogscript.extra.Condition;
-import cn.hyrkg.lib.dialogscript.extra.Setter;
-import cn.hyrkg.lib.dialogscript.extra.TmpCondition;
-import cn.hyrkg.lib.dialogscript.extra.TmpSetter;
+import cn.hyrkg.lib.dialogscript.extra.DialogCondition;
+import cn.hyrkg.lib.dialogscript.extra.DialogSetter;
+import cn.hyrkg.lib.dialogscript.extra.TmpDialogCondition;
+import cn.hyrkg.lib.dialogscript.extra.TmpDialogSetter;
 import cn.hyrkg.lib.dialogscript.factory.StateParser;
 import cn.hyrkg.lib.dialogscript.syntax.*;
 import com.google.common.base.Preconditions;
@@ -27,11 +27,12 @@ public class DialogScriptManager {
     @Getter
     protected HashMap<String, Class<? extends ScriptSyntax>> registeredSyntax = new HashMap<>();
     @Getter
-    protected HashMap<String, Setter> registeredSetters = new HashMap<>();
+    protected HashMap<String, DialogSetter> registeredSetters = new HashMap<>();
     @Getter
-    protected HashMap<String, Condition> registeredConditions = new HashMap<>();
+    protected HashMap<String, DialogCondition> registeredConditions = new HashMap<>();
 
     protected StateParser stateParser = new StateParser(this);
+
 
     public DialogScriptManager() {
         //初始化基础语法
@@ -42,8 +43,8 @@ public class DialogScriptManager {
         this.registerSyntax("set", SetSyntax.class);
         this.registerSyntax("sleep", SleepSyntax.class);
 
-        this.registerConditionHandler("tmp", new TmpCondition());
-        this.registerSetterHandler("tmp", new TmpSetter());
+        this.registerConditionHandler("tmp", new TmpDialogCondition());
+        this.registerSetterHandler("tmp", new TmpDialogSetter());
     }
 
     /**
@@ -54,12 +55,12 @@ public class DialogScriptManager {
         return this;
     }
 
-    public DialogScriptManager registerConditionHandler(String type, Condition handler) {
+    public DialogScriptManager registerConditionHandler(String type, DialogCondition handler) {
         registeredConditions.put(type, handler);
         return this;
     }
 
-    public DialogScriptManager registerSetterHandler(String scope, cn.hyrkg.lib.dialogscript.extra.Setter handler) {
+    public DialogScriptManager registerSetterHandler(String scope, DialogSetter handler) {
         registeredSetters.put(scope, handler);
         return this;
     }
@@ -73,29 +74,35 @@ public class DialogScriptManager {
     }
 
 
-    public HashMap<String, DialogScript> parser(@Nonnull File file) throws IOException {
+    public HashMap<String, DialogScript> parser(@Nonnull File file, boolean loadSyntax) throws IOException {
         Preconditions.checkNotNull(file, "file cannot be null");
         Preconditions.checkState(file.exists(), "file is not exists");
-        return parser(Files.readAllLines(file.toPath()));
+        return parser(Files.readAllLines(file.toPath()), loadSyntax);
     }
 
-    public HashMap<String, DialogScript> parser(@Nonnull String str) {
+    public HashMap<String, DialogScript> parser(@Nonnull String str, boolean loadSyntax) {
         Preconditions.checkNotNull(str, "str cannot be null");
 
         String[] args = str.split("\\n");
         List<String> strList = new ArrayList<>();
         strList.addAll(Arrays.asList(args));
-        return parser(strList);
+        return parser(strList, loadSyntax);
     }
 
 
-    public HashMap<String, DialogScript> parser(List<String> strList) {
+    public DialogScript parserSingleScript(File file, boolean loadSyntax) throws IOException {
+        return parser(file, loadSyntax).get(StateParser.DEFAULT_SCRIPT_KEY);
+    }
+
+    public HashMap<String, DialogScript> parser(List<String> strList, boolean loadSyntax) {
+        if (!loadSyntax) {
+            stateParser.loadSyntax = false;
+        }
         Preconditions.checkNotNull(strList, "list cannot be null");
         stateParser.parser(strList);
+        if (!loadSyntax) {
+            stateParser.loadSyntax = true;
+        }
         return stateParser.produceMap;
-    }
-
-    public DialogScript parserSingleScript(File file) throws IOException {
-        return parser(file).get(StateParser.DEFAULT_SCRIPT_KEY);
     }
 }

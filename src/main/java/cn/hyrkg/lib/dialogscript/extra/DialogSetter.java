@@ -2,7 +2,7 @@ package cn.hyrkg.lib.dialogscript.extra;
 
 import cn.hyrkg.lib.dialogscript.player.BaseScriptPlayer;
 
-public interface Setter {
+public interface DialogSetter {
     /**
      * @param player 当前播放器
      * @param key    变量名

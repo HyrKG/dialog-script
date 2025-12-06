@@ -13,9 +13,9 @@ public class TestScript {
         System.out.println(testFile.getAbsolutePath());
         DialogScriptManager dialogScriptManager = new DialogScriptManager();
 
-        DialogScript script = dialogScriptManager.parserSingleScript(testFile);
+        DialogScript script = dialogScriptManager.parserSingleScript(testFile, true);
 
-        ConsoleDialogPlayer dialogPlayer = new ConsoleDialogPlayer(dialogScriptManager);
+        ConsoleDialogPlayer dialogPlayer = new ConsoleDialogPlayer();
         dialogPlayer.play(script);
     }
 }

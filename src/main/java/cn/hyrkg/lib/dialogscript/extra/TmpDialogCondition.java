@@ -2,9 +2,9 @@ package cn.hyrkg.lib.dialogscript.extra;
 
 import cn.hyrkg.lib.dialogscript.player.BaseScriptPlayer;
 
-public class TmpCondition implements Condition {
+public class TmpDialogCondition implements DialogCondition {
     @Override
-    public boolean check(BaseScriptPlayer player, String type, String params) {
+    public boolean check(BaseScriptPlayer player, String type, String condition, String params) {
         // 对于 'tmp' 处理器，type 就是 "tmp"，params 是 "key value" 或者 "key"
         // 我们需要解析 params
 

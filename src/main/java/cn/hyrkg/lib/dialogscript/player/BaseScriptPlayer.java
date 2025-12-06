@@ -1,7 +1,6 @@
 package cn.hyrkg.lib.dialogscript.player;
 
 import cn.hyrkg.lib.dialogscript.DialogScript;
-import cn.hyrkg.lib.dialogscript.DialogScriptManager;
 import cn.hyrkg.lib.dialogscript.DialogSection;
 import cn.hyrkg.lib.dialogscript.syntax.ScriptSyntax;
 import cn.hyrkg.lib.dialogscript.syntax.SetSyntax;
@@ -119,7 +118,7 @@ public abstract class BaseScriptPlayer {
      * 处理条件分支语法
      */
     private void handleConditionSyntax(ConditionSyntax cond) {
-        if (!checkCondition(cond.getType(), cond.getParams())) {
+        if (!checkCondition(cond.getScope(), cond.getCondition(), cond.getParams())) {
             // 如果条件不满足
             if (cond.getJumpIndexWhenFalse() != -1) {
                 // 如果有跳转目标，直接跳转
@@ -158,13 +157,13 @@ public abstract class BaseScriptPlayer {
     /**
      * 检查条件是否满足
      */
-    public boolean checkCondition(String type, String params) {
+    public boolean checkCondition(String scope, String condition, String params) {
         // 1. 优先使用注册的处理器
-        if (playingScrip.getManager().getRegisteredConditions().containsKey(type)) {
-            return playingScrip.getManager().getRegisteredConditions().get(type).check(this, type, params);
+        if (playingScrip.getManager().getRegisteredConditions().containsKey(scope)) {
+            return playingScrip.getManager().getRegisteredConditions().get(scope).check(this, scope, condition, params);
         } else {
             // 2. 未找到处理器，打印警告并返回 false
-            System.err.println("Warning: No condition handler found for type: " + type);
+            System.err.println("Warning: No condition handler found for type: " + scope);
             return false;
         }
     }
