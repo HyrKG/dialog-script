@@ -1,6 +1,6 @@
 package cn.hyrkg.lib.dialogscript;
 
-import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
+import cn.hyrkg.lib.dialogscript.syntax.ScriptSyntax;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class DialogSection {
     @Getter
-    protected List<IScriptSyntax> syntaxList = new ArrayList<>();
+    protected List<ScriptSyntax> syntaxList = new ArrayList<>();
 
 
-    public IScriptSyntax findPrevious(IScriptSyntax syntax) {
+    public ScriptSyntax findPrevious(ScriptSyntax syntax) {
         int index = findIndex(syntax);
         if (index == -1 || index == 0) {
             return null;
@@ -19,7 +19,7 @@ public class DialogSection {
         return syntaxList.get(index - 1);
     }
 
-    public IScriptSyntax findNext(IScriptSyntax syntax) {
+    public ScriptSyntax findNext(ScriptSyntax syntax) {
         int index = findIndex(syntax);
         if (index == -1 || index == syntaxList.size() - 1) {
             return null;
@@ -27,7 +27,7 @@ public class DialogSection {
         return syntaxList.get(index + 1);
     }
 
-    public int findIndex(IScriptSyntax syntax) {
+    public int findIndex(ScriptSyntax syntax) {
         for(int i=0;i<syntaxList.size();i++)
         {
             if(syntaxList.get(i)==syntax)

@@ -1,11 +1,10 @@
-package cn.hyrkg.lib.dialogscript.syntax.dafault;
+package cn.hyrkg.lib.dialogscript.syntax;
 
-import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
 import cn.hyrkg.lib.dialogscript.utils.RegexPatternUtil;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 
-public class JumpSyntax implements IScriptSyntax {
+public class JumpSyntax implements ScriptSyntax {
 
     @Getter
     protected String section = null;

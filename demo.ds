@@ -1,0 +1,97 @@
+# 示例对话脚本
+
+# 定义入口章节 (默认会从这里开始)
+{default}
+set tmp coin 100
+set tmp hp 100
+set tmp met_princess false
+set tmp has_sword false
+set tmp has_flower false
+
+.. "欢迎来到 DialogScript 演示世界。"
+sleep 500
+.. "这是一个简单的文本冒险演示。"
+.. "你现在拥有 100 金币和 100 点生命值。"
+.. "你现在站在一个岔路口，你要往哪里走？"
+
+# 定义选项
+-> "向左走进阴森的森林" -> {forest}
+-> "向右走进阳光明媚的花园" -> {garden}
+-> "转身离开这个是非之地" -> {leave}
+-> "待在原地发呆" -> {idle}
+
+# 定义森林章节 (结局 B)
+{forest}
+.. "森林里光线很暗..."
+sleep 800
+.. "你发现了一把生锈的铁剑！"
+set tmp has_sword true
+.. "虽然生锈了，但总比没有好。(获得物品：铁剑)"
+.. "突然，草丛里跳出来一只史莱姆！"
+.. "但是你不仅有剑，还跑得快，所以你逃跑了。"
+set tmp hp 90
+.. "逃跑时摔了一跤，扣除 10 点生命值。"
+> {end}
+
+# 定义花园章节 (结局 A)
+{garden}
+.. "花园里开满了鲜花，空气很清新。"
+.. "你感觉心情变得很愉快。"
+set tmp hp 110
+.. "生命值增加了 10 点！"
+.. "你看到路边有一朵漂亮的花。"
+-> "采摘它" -> {pick_flower}
+-> "不要乱采花草" -> {meet_princess}
+
+{pick_flower}
+set tmp has_flower true
+.. "你采了一朵花。"
+> {meet_princess}
+
+{meet_princess}
+set tmp met_princess true
+.. "你在花园深处遇到了一位公主。"
+if tmp has_flower
+    .. "你把刚采的花送给了公主。"
+    .. "公主看起来很开心，送给你 50 金币。"
+    set tmp coin 150
+else
+    .. "你两手空空，只能很有礼貌地向公主问好。"
+    .. "公主觉得你是个守规矩的好人，但并没有给你钱。"
+endif
+> {end}
+
+# 定义离开章节 (结局 C)
+{leave}
+.. "你决定不参与这些冒险。"
+.. "平平淡淡才是真。"
+> {end}
+
+# 定义发呆章节
+{idle}
+.. "你就在路口站着..."
+sleep 1000
+.. "一阵风吹过。"
+sleep 1000
+.. "还是什么都没发生，除了肚子饿了。"
+# 跳转回开头，形成循环
+> {default}
+
+# 结束章节
+{end}
+.. "冒险告一段落。"
+
+if tmp met_princess
+    .. "结局 A：皇家朋友"
+    if tmp has_flower
+        .. "评价：情商很高！ (达成条件：遇见公主 + 有花)"
+    else
+        .. "评价：彬彬有礼。 (达成条件：遇见公主 + 无花)"
+    endif
+elif tmp has_sword
+    .. "结局 B：落魄剑士 (达成条件：有剑 + 没见公主)"
+else
+    .. "结局 C：普通的游客 (达成条件：啥都没有)"
+endif
+
+.. "演示结束，感谢游玩！"

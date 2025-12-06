@@ -1,5 +1,5 @@
 package cn.hyrkg.lib.dialogscript.syntax;
 
-public interface IScriptSyntax {
+public interface ScriptSyntax {
     void parser(String line);
 }

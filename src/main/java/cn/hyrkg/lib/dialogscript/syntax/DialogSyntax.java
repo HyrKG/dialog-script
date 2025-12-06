@@ -1,15 +1,12 @@
-package cn.hyrkg.lib.dialogscript.syntax.dafault;
+package cn.hyrkg.lib.dialogscript.syntax;
 
-import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
 import cn.hyrkg.lib.dialogscript.utils.RegexPatternUtil;
-import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
 
-public class DialogSyntax implements IScriptSyntax {
+public class DialogSyntax implements ScriptSyntax {
     private static final Random RANDOM = new Random();
 
     private List<String> texts = new ArrayList<>();

@@ -1,10 +1,9 @@
-package cn.hyrkg.lib.dialogscript.syntax.dafault;
+package cn.hyrkg.lib.dialogscript.syntax;
 
-import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
 import cn.hyrkg.lib.dialogscript.utils.RegexPatternUtil;
 import com.google.common.base.Preconditions;
 
-public class OptionSyntax implements IScriptSyntax {
+public class OptionSyntax implements ScriptSyntax {
 
     public static final OptionSyntax WAIT_FOR_CLICK = new OptionSyntax();
 

@@ -1,4 +1,4 @@
-package cn.hyrkg.lib.dialogscript.player.annotation;
+package cn.hyrkg.lib.dialogscript.player;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

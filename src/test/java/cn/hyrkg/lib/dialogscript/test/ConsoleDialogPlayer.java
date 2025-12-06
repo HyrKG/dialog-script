@@ -1,10 +1,11 @@
-package cn.hyrkg.lib.dialogscript.player.test;
+package cn.hyrkg.lib.dialogscript.test;
 
+import cn.hyrkg.lib.dialogscript.DialogScriptManager;
 import cn.hyrkg.lib.dialogscript.player.BaseScriptPlayer;
-import cn.hyrkg.lib.dialogscript.player.annotation.ListenSyntax;
-import cn.hyrkg.lib.dialogscript.syntax.dafault.ActionSyntax;
-import cn.hyrkg.lib.dialogscript.syntax.dafault.DialogSyntax;
-import cn.hyrkg.lib.dialogscript.syntax.dafault.OptionSyntax;
+import cn.hyrkg.lib.dialogscript.player.ListenSyntax;
+import cn.hyrkg.lib.dialogscript.syntax.ActionSyntax;
+import cn.hyrkg.lib.dialogscript.syntax.DialogSyntax;
+import cn.hyrkg.lib.dialogscript.syntax.OptionSyntax;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,8 @@ public class ConsoleDialogPlayer extends BaseScriptPlayer {
 
     private HashMap<Integer, OptionSyntax> currentOptions = new HashMap<>();
 
-    public ConsoleDialogPlayer() {
+    public ConsoleDialogPlayer(DialogScriptManager manager) {
+        super(manager);
         useAnnotationFramework();
     }
 

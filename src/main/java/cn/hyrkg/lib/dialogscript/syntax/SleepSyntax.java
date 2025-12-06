@@ -1,9 +1,8 @@
-package cn.hyrkg.lib.dialogscript.syntax.dafault;
+package cn.hyrkg.lib.dialogscript.syntax;
 
-import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
 import lombok.Getter;
 
-public class SleepSyntax implements IScriptSyntax {
+public class SleepSyntax implements ScriptSyntax {
     @Getter
     protected int sleepTimeInMs = 10;
 

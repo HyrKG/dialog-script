@@ -1,8 +1,11 @@
-package cn.hyrkg.lib.dialogscript.parser;
+package cn.hyrkg.lib.dialogscript;
 
-import cn.hyrkg.lib.dialogscript.DialogScript;
-import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
-import cn.hyrkg.lib.dialogscript.syntax.dafault.*;
+import cn.hyrkg.lib.dialogscript.extra.Condition;
+import cn.hyrkg.lib.dialogscript.extra.Setter;
+import cn.hyrkg.lib.dialogscript.extra.TmpCondition;
+import cn.hyrkg.lib.dialogscript.extra.TmpSetter;
+import cn.hyrkg.lib.dialogscript.factory.StateParser;
+import cn.hyrkg.lib.dialogscript.syntax.*;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -19,34 +22,53 @@ import java.util.List;
 /**
  * 此类会把所有的语法加载，并交给状态处理器解析
  */
-public class DialogScriptParser {
+public class DialogScriptManager {
 
     @Getter
-    protected HashMap<String, Class<? extends IScriptSyntax>> registeredSyntax = new HashMap<>();
+    protected HashMap<String, Class<? extends ScriptSyntax>> registeredSyntax = new HashMap<>();
+    @Getter
+    protected HashMap<String, Setter> registeredSetters = new HashMap<>();
+    @Getter
+    protected HashMap<String, Condition> registeredConditions = new HashMap<>();
 
     protected StateParser stateParser = new StateParser(this);
 
-    public DialogScriptParser() {
+    public DialogScriptManager() {
         //初始化基础语法
         this.registerSyntax("@", ActionSyntax.class);
         this.registerSyntax("..", DialogSyntax.class);
         this.registerSyntax("->", OptionSyntax.class);
         this.registerSyntax(">", JumpSyntax.class);
+        this.registerSyntax("set", SetSyntax.class);
         this.registerSyntax("sleep", SleepSyntax.class);
+
+        this.registerConditionHandler("tmp", new TmpCondition());
+        this.registerSetterHandler("tmp", new TmpSetter());
     }
 
     /**
      * 注册语法
      */
-    public DialogScriptParser registerSyntax(String tag, Class<? extends IScriptSyntax> syntaxClass) {
+    public DialogScriptManager registerSyntax(String tag, Class<? extends ScriptSyntax> syntaxClass) {
         registeredSyntax.put(tag, syntaxClass);
         return this;
     }
 
+    public DialogScriptManager registerConditionHandler(String type, Condition handler) {
+        registeredConditions.put(type, handler);
+        return this;
+    }
+
+    public DialogScriptManager registerSetterHandler(String scope, cn.hyrkg.lib.dialogscript.extra.Setter handler) {
+        registeredSetters.put(scope, handler);
+        return this;
+    }
+
+
     @SneakyThrows
-    public IScriptSyntax createSyntax(String tag) {
+    public ScriptSyntax createSyntax(String tag) {
         Preconditions.checkState(registeredSyntax.containsKey(tag), "undefined syntax " + tag);
-        IScriptSyntax syntax = registeredSyntax.get(tag).newInstance();
+        ScriptSyntax syntax = registeredSyntax.get(tag).newInstance();
         return syntax;
     }
 
