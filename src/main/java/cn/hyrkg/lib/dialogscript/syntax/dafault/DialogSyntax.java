@@ -4,17 +4,25 @@ import cn.hyrkg.lib.dialogscript.syntax.IScriptSyntax;
 import cn.hyrkg.lib.dialogscript.utils.RegexPatternUtil;
 import com.google.common.base.Preconditions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 
 public class DialogSyntax implements IScriptSyntax {
+    private static final Random RANDOM = new Random();
 
-    public String text = "...";
+    private List<String> texts = new ArrayList<>();
 
     @Override
     public void parser(String line) {
-        Matcher matcher = RegexPatternUtil.PATTERN_QUOTE.matcher(line);
-        Preconditions.checkState(matcher.matches(), "wrong syntax " + line);
-        String text = matcher.group().substring(1, matcher.group().length() - 1);
-        this.text = text;
+        texts.addAll(RegexPatternUtil.getQuoteMultiContent(line));
+    }
+
+    public String getText() {
+        if (texts.isEmpty()) {
+            return "...";
+        }
+        return texts.get(RANDOM.nextInt(texts.size()));
     }
 }

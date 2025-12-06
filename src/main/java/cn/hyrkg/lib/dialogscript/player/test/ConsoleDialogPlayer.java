@@ -21,7 +21,7 @@ public class ConsoleDialogPlayer extends BaseScriptPlayer {
 
     @ListenSyntax
     public void dialog(DialogSyntax dialogSyntax) {
-        System.out.println("'" + dialogSyntax.text + "'");
+        System.out.println("'" + dialogSyntax.getText() + "'");
 
     }
 
