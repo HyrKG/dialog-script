@@ -1,11 +1,18 @@
 package cn.hyrkg.lib.dialogscript;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Collection;
 import java.util.HashMap;
 
+@RequiredArgsConstructor
 public class DialogScript {
 
     public static final String ENTRY_SECTION = "default";
+
+    @Getter
+    private final DialogScriptManager manager;
 
     protected HashMap<String, DialogSection> sectionMap = new HashMap<>();
 

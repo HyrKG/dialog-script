@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public abstract class BaseScriptPlayer {
-    protected final DialogScriptManager manager;
+
     protected DialogScript playingScrip = null;
     protected DialogSection playingSection = null;
     protected UUID playingSectionUuid = UUID.randomUUID();
@@ -147,8 +147,8 @@ public abstract class BaseScriptPlayer {
      */
     private void handleSetSyntax(SetSyntax setSyntax) {
         String scope = setSyntax.getScope();
-        if (manager.getRegisteredSetters().containsKey(scope)) {
-            manager.getRegisteredSetters().get(scope).set(this, setSyntax.getKey(), setSyntax.getValue());
+        if (playingScrip.getManager().getRegisteredSetters().containsKey(scope)) {
+            playingScrip.getManager().getRegisteredSetters().get(scope).set(this, setSyntax.getKey(), setSyntax.getValue());
         } else {
             // 如果未找到处理器，可以选择忽略或打印警告
             System.err.println("Warning: No setter handler found for scope: " + scope);
@@ -160,8 +160,8 @@ public abstract class BaseScriptPlayer {
      */
     public boolean checkCondition(String type, String params) {
         // 1. 优先使用注册的处理器
-        if (manager.getRegisteredConditions().containsKey(type)) {
-            return manager.getRegisteredConditions().get(type).check(this, type, params);
+        if (playingScrip.getManager().getRegisteredConditions().containsKey(type)) {
+            return playingScrip.getManager().getRegisteredConditions().get(type).check(this, type, params);
         } else {
             // 2. 未找到处理器，打印警告并返回 false
             System.err.println("Warning: No condition handler found for type: " + type);

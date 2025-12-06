@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 
 import cn.hyrkg.lib.dialogscript.syntax.ConditionSyntax;
 import cn.hyrkg.lib.dialogscript.syntax.GotoSyntax;
+
 import java.util.Stack;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,7 @@ public class StateParser {
         ConditionSyntax currentActiveCondition;
         List<GotoSyntax> endJumps = new ArrayList<>();
     }
-    
+
     private Stack<BlockContext> blockStack = new Stack<>();
 
     public HashMap<String, DialogScript> produceMap = new HashMap<>();
@@ -49,7 +50,7 @@ public class StateParser {
             produceMap.put(scriptName, script);
         }
         scriptName = newScripName;
-        script = new DialogScript();
+        script = new DialogScript(creator);
         switchNewSection(DialogScript.ENTRY_SECTION);
     }
 
@@ -113,7 +114,7 @@ public class StateParser {
         ConditionSyntax syntax = new ConditionSyntax();
         syntax.parser(conditionLine);
         completeSyntax(syntax);
-        
+
         context.currentActiveCondition = syntax;
     }
 
@@ -138,7 +139,7 @@ public class StateParser {
         ConditionSyntax syntax = new ConditionSyntax();
         syntax.parser(conditionLine);
         completeSyntax(syntax);
-        
+
         context.currentActiveCondition = syntax;
     }
 
