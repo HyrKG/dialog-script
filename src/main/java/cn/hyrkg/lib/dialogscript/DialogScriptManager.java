@@ -31,8 +31,6 @@ public class DialogScriptManager {
     @Getter
     protected HashMap<String, DialogCondition> registeredConditions = new HashMap<>();
 
-    protected StateParser stateParser = new StateParser(this);
-
 
     public DialogScriptManager() {
         //初始化基础语法
@@ -95,6 +93,7 @@ public class DialogScriptManager {
     }
 
     public HashMap<String, DialogScript> parser(List<String> strList, boolean loadSyntax) {
+        StateParser stateParser = new StateParser(this);
         if (!loadSyntax) {
             stateParser.loadSyntax = false;
         }
