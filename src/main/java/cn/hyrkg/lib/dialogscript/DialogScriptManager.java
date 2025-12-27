@@ -94,14 +94,9 @@ public class DialogScriptManager {
 
     public HashMap<String, DialogScript> parser(List<String> strList, boolean loadSyntax) {
         StateParser stateParser = new StateParser(this);
-        if (!loadSyntax) {
-            stateParser.loadSyntax = false;
-        }
+        stateParser.loadSyntax = loadSyntax;
         Preconditions.checkNotNull(strList, "list cannot be null");
         stateParser.parser(strList);
-        if (!loadSyntax) {
-            stateParser.loadSyntax = true;
-        }
         return stateParser.produceMap;
     }
 }
